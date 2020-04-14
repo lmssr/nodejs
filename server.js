@@ -1,7 +1,16 @@
 const http = require('http');
+const url = require('url');
+const querystring = require('querystring');
 
 const server = http.createServer(function(req, res) {
-  res.writeHead(200);
-  res.end('Salut tout le monde !');
+    const params = querystring.parse(url.parse(req.url).query);
+    res.writeHead(200, {"Content-Type": "text/plain"});
+    if ('prenom' in params && 'nom' in params) {
+        res.write('Vous vous appelez ' + params['prenom'] + ' ' + params['nom']);
+    }
+    else {
+        res.write('Vous devez bien avoir un prénom et un nom, non ?');
+    }
+    res.end();
 });
 server.listen(8080);
